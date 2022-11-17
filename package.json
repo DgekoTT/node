@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/DgekoTT/fisr-backend-js/issues"
   },
-  "homepage": "https://github.com/DgekoTT/fisr-backend-js#readme"
+  "homepage": "https://github.com/DgekoTT/fisr-backend-js#readme",
+  "dependencies": {
+    "ejs": "^3.1.8",
+    "expres": "^0.0.5",
+    "nodemon": "^2.0.20"
+  }
 }

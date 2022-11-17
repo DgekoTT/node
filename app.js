@@ -6,6 +6,8 @@ const PORT = 3000
 
 const server = http.createServer((req, res) => {
     console.log('Server is requested');
+    
+
     console.log(req.url, req.method);
      
     res.setHeader('Content-Type', 'text/html');
