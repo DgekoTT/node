@@ -56,7 +56,9 @@ body {
   
   .info {
     display: flex;
+    font-weight: bold;
     justify-content: space-between;
+    color: rgb(4, 4, 4);
   }
   
   h2 a {

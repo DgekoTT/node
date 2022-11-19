@@ -3,6 +3,7 @@ const path = require('path');
 const morgan = require('morgan')
 const mongoose = require("mongoose");
 const Post = require('./models/post')
+const Contact = require('./models/contacts')
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -34,36 +35,37 @@ app.get('/', (req, res) => { // выдает главную страницу
 });
 app.get('/contacts', (req, res) => { // выдает страницу контактов
     const title = 'Contacts';
-    const contacts = [
-        {name: 'YouTube', link: 'https://www.youtube.com/watch?v=tlUcmD0zPI4'},
-        {name: 'GitHub', link: 'https://github.com/DgekoTT'},
-    ];
-    res.render(createPath('contacts'), {contacts, title}  );
+    Contact
+        .find()
+        .then((contacts) => res.render(createPath('contacts'), {contacts, title}  ))
+        .catch((error) => {
+            console.log(error);
+            res.render(createPath('error'), {title: 'Error'})
+        });
 });
 
 
 app.get('/posts/:id', (req, res ) => {
     const title = 'Post'
-    const post = {
-        id: '1',
-        text: 'initial part',
-        title: 'Post title',
-        date: '17.11.22',
-        author: 'Jhohan',
-    };
-    res.render(createPath('post'), {title, post});
+    Post
+        .findById(req.params.id)
+        .then((post) =>  res.render(createPath('post'), {title, post}))
+        .catch((error) => {
+            console.log(error);
+            res.render(createPath('error'), { title: 'Error'})
+        });
 });
 
 app.get('/posts', (req, res) => {
-    const title = 'Post'
-    const posts =[ {
-        id: '1',
-        text: 'initial part',
-        title: 'Post title',
-        date: '17.11.22',
-        author: 'Jhohan',
-    }];
-    res.render(createPath('posts'), {title, posts});
+    const title = 'Posts'
+    Post
+        .find()
+        .sort({created_at: -1})
+        .then((posts) =>  res.render(createPath('posts'), {posts, title}))
+        .catch((error) => {
+            console.log(error);
+            res.render(createPath('error'), {title: 'Error'})
+        });
 });
 
 app.post('/add-post', (req, res) => { // добавляет пост на сайт
@@ -71,11 +73,12 @@ app.post('/add-post', (req, res) => { // добавляет пост на сай
     const post = new Post({title, author, text});
     post
         .save()
-        .then((result) => res.send(result))
+        .then((result) => res.redirect('/posts'))
         .catch((error) => {
             console.log(error);
             res.render(createPath('error'), {title: 'Error'})
-        })
+        });
+    
 });
 
 app.get('/add-post', (req, res) => { // получем страницу добавления на сайт 
