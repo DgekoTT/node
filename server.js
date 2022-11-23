@@ -30,11 +30,16 @@ app.use(express.urlencoded({ extend: false}));// парсит входяшие �
 
 app.use(methodOverride('_method'));
 
+app.get('/', (req, res) => { // выдает главную страницу
+    const title = 'Home';
+    res.render(createPath('index'), {title});
+});
+
 app.use(postRoutes);
 
 app.use(contactRoutes);
 
-router.use((req, res) =>{ /* в случае если пользователь введет 
+app.use((req, res) =>{ /* в случае если пользователь введет 
 неверный адрес, выдаст страницу ошибки и код ошибки */
     const title = 'Error'
     res
